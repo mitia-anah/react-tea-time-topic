@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default function TopicLists({ topic }) {
+function TopicLists({ topic }) {
 
     return (
         <article>
@@ -8,3 +8,4 @@ export default function TopicLists({ topic }) {
         </article>
     )
 }
+export default TopicLists

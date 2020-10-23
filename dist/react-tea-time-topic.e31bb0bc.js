@@ -29778,7 +29778,7 @@ if ("development" === 'production') {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = Form;
+exports.default = void 0;
 
 var _react = _interopRequireDefault(require("react"));
 
@@ -29792,13 +29792,16 @@ function Form() {
     type: "submit"
   }, "Submit"));
 }
+
+var _default = Form;
+exports.default = _default;
 },{"react":"node_modules/react/index.js"}],"component/TopicLists.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = TopicLists;
+exports.default = void 0;
 
 var _react = _interopRequireDefault(require("react"));
 
@@ -29809,17 +29812,22 @@ function TopicLists({
 }) {
   return /*#__PURE__*/_react.default.createElement("article", null, /*#__PURE__*/_react.default.createElement("h5", null, topic.title));
 }
+
+var _default = TopicLists;
+exports.default = _default;
 },{"react":"node_modules/react/index.js"}],"component/Topics.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = Topics;
+exports.default = void 0;
 
 var _react = _interopRequireWildcard(require("react"));
 
-var _TopicLists = require("./TopicLists");
+var _TopicLists = _interopRequireDefault(require("./TopicLists"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
 
@@ -29837,11 +29845,14 @@ function Topics() {
 
     getTopics();
   }, []);
-  return /*#__PURE__*/_react.default.createElement("div", null, topics.map(data => /*#__PURE__*/_react.default.createElement(_TopicLists.TopicLists, {
+  return /*#__PURE__*/_react.default.createElement("div", null, topics.map(data => /*#__PURE__*/_react.default.createElement(_TopicLists.default, {
     topic: data,
     key: data.id
   })));
 }
+
+var _default = Topics;
+exports.default = _default;
 },{"react":"node_modules/react/index.js","./TopicLists":"component/TopicLists.js"}],"component/App.js":[function(require,module,exports) {
 "use strict";
 
@@ -29852,14 +29863,14 @@ exports.default = void 0;
 
 var _react = _interopRequireDefault(require("react"));
 
-var _Form = require("../component/Form");
+var _Form = _interopRequireDefault(require("../component/Form"));
 
-var _Topics = require("../component/Topics");
+var _Topics = _interopRequireDefault(require("../component/Topics"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function App() {
-  return /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement("h1", null, "Tea Time Topic"), /*#__PURE__*/_react.default.createElement(_Form.Form, null), /*#__PURE__*/_react.default.createElement(_Topics.Topics, null));
+  return /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement("h1", null, "Tea Time Topic"), /*#__PURE__*/_react.default.createElement(_Form.default, null), /*#__PURE__*/_react.default.createElement(_Topics.default, null));
 }
 
 var _default = App;
@@ -29904,7 +29915,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53583" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53848" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

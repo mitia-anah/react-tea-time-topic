@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default function Form() {
+function Form() {
     return (
         <form>
             <label>Add a topic</label>
@@ -9,3 +9,4 @@ export default function Form() {
         </form>
     )
 }
+export default Form
