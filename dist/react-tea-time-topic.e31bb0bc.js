@@ -29772,38 +29772,7 @@ if ("development" === 'production') {
 } else {
   module.exports = require('./cjs/react-dom.development.js');
 }
-},{"./cjs/react-dom.development.js":"node_modules/react-dom/cjs/react-dom.development.js"}],"component/Form.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-var _react = _interopRequireDefault(require("react"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function Form(props) {
-  const {
-    handleSubmit
-  } = props;
-  return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement("header", null, /*#__PURE__*/_react.default.createElement("h4", null, "Add a topic")), /*#__PURE__*/_react.default.createElement("article", null, /*#__PURE__*/_react.default.createElement("form", {
-    className: "add-topic"
-  }, /*#__PURE__*/_react.default.createElement("input", {
-    type: "text",
-    name: "topic",
-    onChange: handleSubmit,
-    placeholder: "Type your idea here"
-  }), /*#__PURE__*/_react.default.createElement("button", {
-    type: "submit",
-    onSubmit: handleSubmit
-  }, "Submit"))));
-}
-
-var _default = Form;
-exports.default = _default;
-},{"react":"node_modules/react/index.js"}],"component/TopicLists.js":[function(require,module,exports) {
+},{"./cjs/react-dom.development.js":"node_modules/react-dom/cjs/react-dom.development.js"}],"component/TopicLists.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -29876,7 +29845,60 @@ function PastTopic(props) {
 
 var _default = PastTopic;
 exports.default = _default;
-},{"react":"node_modules/react/index.js"}],"component/Topics.js":[function(require,module,exports) {
+},{"react":"node_modules/react/index.js"}],"component/Form.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = _interopRequireWildcard(require("react"));
+
+var _Topics = _interopRequireDefault(require("./Topics"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function Form({
+  topics,
+  setTopics
+}) {
+  const [newTopic, setAddTopics] = (0, _react.useState)('');
+
+  const handleSubmit = e => {
+    e.preventDefault();
+    newTopic = {
+      upvotes: 0,
+      downvotes: 0,
+      disussedOn: '',
+      title: title,
+      id: Date.now()
+    };
+    topics.push(newTopic);
+    setTopics([...topics]);
+  };
+
+  return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement("header", null, /*#__PURE__*/_react.default.createElement("h4", null, "Add a topic")), /*#__PURE__*/_react.default.createElement("article", null, /*#__PURE__*/_react.default.createElement("form", {
+    className: "add-topic",
+    onSubmit: handleSubmit
+  }, /*#__PURE__*/_react.default.createElement("input", {
+    type: "text",
+    name: "topic",
+    value: newTopic,
+    onChange: e => setAddTopics(e.target.value),
+    placeholder: "Type your idea here"
+  }), /*#__PURE__*/_react.default.createElement("button", {
+    type: "submit"
+  }, "Submit"))));
+}
+
+var _default = Form;
+exports.default = _default;
+},{"react":"node_modules/react/index.js","./Topics":"component/Topics.js"}],"component/Topics.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -29905,7 +29927,6 @@ function Topics() {
   const [downvote, setDownvote] = (0, _react.useState)(0);
   const [removeTopic, setRemoveTopic] = (0, _react.useState)('');
   const [archive, setArchive] = (0, _react.useState)('');
-  const [newTopic, setNewTopic] = (0, _react.useState)([]);
   (0, _react.useEffect)(() => {
     const getTopics = async () => {
       const res = await fetch(API_URL);
@@ -29950,25 +29971,7 @@ function Topics() {
     setArchive(archivedTopic);
   };
 
-  const handleSubmit = e => {
-    e.preventDefault();
-    let newTopic = createNewTopic(e.currentTarget.topic.value);
-    setNewTopic(newTopic);
-  };
-
-  const createNewTopic = topics => {
-    return {
-      upvotes: 0,
-      downvotes: 0,
-      disussedOn: '',
-      title: topics,
-      id: Date.now()
-    };
-  };
-
-  return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement(_Form.default, {
-    handleSubmit: handleSubmit
-  }), /*#__PURE__*/_react.default.createElement("section", null, /*#__PURE__*/_react.default.createElement("h4", null, "Next Topic"), topics.filter(topic => !topic.discussedOn).sort((a, b) => {
+  return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement(_Form.default, null), /*#__PURE__*/_react.default.createElement("section", null, /*#__PURE__*/_react.default.createElement("h4", null, "Next Topic"), topics.filter(topic => !topic.discussedOn).sort((a, b) => {
     const topicA = a.upvotes - a.downvotes;
     const topicB = b.upvotes - b.downvotes;
     return topicB - topicA;
@@ -29997,19 +30000,17 @@ exports.default = void 0;
 
 var _react = _interopRequireDefault(require("react"));
 
-var _Form = _interopRequireDefault(require("../component/Form"));
-
 var _Topics = _interopRequireDefault(require("../component/Topics"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function App() {
-  return /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement("h1", null, "Tea Time Topic"), /*#__PURE__*/_react.default.createElement(_Form.default, null), /*#__PURE__*/_react.default.createElement(_Topics.default, null));
+  return /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement("h1", null, "Tea Time Topic"), /*#__PURE__*/_react.default.createElement(_Topics.default, null));
 }
 
 var _default = App;
 exports.default = _default;
-},{"react":"node_modules/react/index.js","../component/Form":"component/Form.js","../component/Topics":"component/Topics.js"}],"index.js":[function(require,module,exports) {
+},{"react":"node_modules/react/index.js","../component/Topics":"component/Topics.js"}],"index.js":[function(require,module,exports) {
 "use strict";
 
 var _react = _interopRequireDefault(require("react"));

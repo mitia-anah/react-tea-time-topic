@@ -11,7 +11,6 @@ function Topics() {
     const [downvote, setDownvote] = useState(0)
     const [removeTopic, setRemoveTopic] = useState('')
     const [archive, setArchive] = useState('')
-    const [newTopic, setNewTopic] = useState([])
 
     useEffect(() => {
         const getTopics = async () => {
@@ -52,25 +51,10 @@ function Topics() {
         setArchive(archivedTopic);
     };
 
-    const handleSubmit = e => {
-        e.preventDefault();
-        let newTopic = createNewTopic(e.currentTarget.topic.value);
-        setNewTopic(newTopic);
-    };
-
-    const createNewTopic = (topics) => {
-        return {
-            upvotes: 0,
-            downvotes: 0,
-            disussedOn: '',
-            title: topics,
-            id: Date.now(),
-        };
-    };
 
     return (
         <>
-            <Form handleSubmit={handleSubmit} />
+            <Form />
             <section>
                 <h4>Next Topic</h4>
                 {topics
