@@ -29784,13 +29784,21 @@ var _react = _interopRequireDefault(require("react"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function Form() {
-  return /*#__PURE__*/_react.default.createElement("form", null, /*#__PURE__*/_react.default.createElement("label", null, "Add a topic"), /*#__PURE__*/_react.default.createElement("input", {
+function Form(props) {
+  const {
+    handleSubmit
+  } = props;
+  return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement("header", null, /*#__PURE__*/_react.default.createElement("h4", null, "Add a topic")), /*#__PURE__*/_react.default.createElement("article", null, /*#__PURE__*/_react.default.createElement("form", {
+    className: "add-topic"
+  }, /*#__PURE__*/_react.default.createElement("input", {
     type: "text",
+    name: "topic",
+    onChange: handleSubmit,
     placeholder: "Type your idea here"
   }), /*#__PURE__*/_react.default.createElement("button", {
-    type: "submit"
-  }, "Submit"));
+    type: "submit",
+    onSubmit: handleSubmit
+  }, "Submit"))));
 }
 
 var _default = Form;
@@ -29807,13 +29815,66 @@ var _react = _interopRequireDefault(require("react"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function TopicLists({
-  topic
-}) {
-  return /*#__PURE__*/_react.default.createElement("article", null, /*#__PURE__*/_react.default.createElement("h5", null, topic.title));
+function NextTopic(props) {
+  const {
+    topic,
+    upvote,
+    downvote,
+    archivedTopic
+  } = props;
+  return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement("article", null, /*#__PURE__*/_react.default.createElement("button", {
+    className: "archive",
+    onClick: archivedTopic,
+    id: topic.id
+  }), /*#__PURE__*/_react.default.createElement("h5", {
+    className: "topic-text",
+    id: topic.id
+  }, topic.title), /*#__PURE__*/_react.default.createElement("div", {
+    className: "votes"
+  }, /*#__PURE__*/_react.default.createElement("button", {
+    className: "upvote",
+    onClick: upvote,
+    id: topic.id
+  }), /*#__PURE__*/_react.default.createElement("span", {
+    className: "upvote-number"
+  }, topic.upvotes), /*#__PURE__*/_react.default.createElement("button", {
+    className: "downvote",
+    onClick: downvote,
+    id: topic.id
+  }), /*#__PURE__*/_react.default.createElement("span", {
+    className: "downvote-number"
+  }, topic.downvotes))));
 }
 
-var _default = TopicLists;
+var _default = NextTopic;
+exports.default = _default;
+},{"react":"node_modules/react/index.js"}],"component/PastTopic.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = _interopRequireDefault(require("react"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function PastTopic(props) {
+  const {
+    topic,
+    removeTopic
+  } = props;
+  const discussedOnDate = new Date(Number(topic.discussedOn));
+  return /*#__PURE__*/_react.default.createElement("article", null, /*#__PURE__*/_react.default.createElement("button", {
+    className: "delete",
+    onClick: removeTopic
+  }), /*#__PURE__*/_react.default.createElement("h5", {
+    className: "topic-text"
+  }, topic.title), /*#__PURE__*/_react.default.createElement("p", null, "Discussed on ", discussedOnDate.toLocaleDateString()));
+}
+
+var _default = PastTopic;
 exports.default = _default;
 },{"react":"node_modules/react/index.js"}],"component/Topics.js":[function(require,module,exports) {
 "use strict";
@@ -29827,6 +29888,10 @@ var _react = _interopRequireWildcard(require("react"));
 
 var _TopicLists = _interopRequireDefault(require("./TopicLists"));
 
+var _PastTopic = _interopRequireDefault(require("./PastTopic"));
+
+var _Form = _interopRequireDefault(require("./Form"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
@@ -29836,6 +29901,11 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 function Topics() {
   const API_URL = "https://gist.githubusercontent.com/Pinois/93afbc4a061352a0c70331ca4a16bb99/raw/6da767327041de13693181c2cb09459b0a3657a1/topics.json";
   const [topics, setTopics] = (0, _react.useState)([]);
+  const [upvote, setUpvote] = (0, _react.useState)(0);
+  const [downvote, setDownvote] = (0, _react.useState)(0);
+  const [removeTopic, setRemoveTopic] = (0, _react.useState)('');
+  const [archive, setArchive] = (0, _react.useState)('');
+  const [newTopic, setNewTopic] = (0, _react.useState)([]);
   (0, _react.useEffect)(() => {
     const getTopics = async () => {
       const res = await fetch(API_URL);
@@ -29845,15 +29915,79 @@ function Topics() {
 
     getTopics();
   }, []);
-  return /*#__PURE__*/_react.default.createElement("div", null, topics.map(data => /*#__PURE__*/_react.default.createElement(_TopicLists.default, {
+
+  function upvotes(e) {
+    const id = e.target.id;
+    const topicToUpvote = topics.find(topic => topic.id == id);
+    let updateVote = topicToUpvote.upvotes++;
+    setUpvote(updateVote);
+  }
+
+  ;
+
+  function downvotes(e) {
+    const id = e.target.id;
+    const topicToDownvote = topics.find(topic => topic.id == id);
+    let minusVote = topicToDownvote.downvotes++;
+    setDownvote(minusVote);
+  }
+
+  ;
+
+  function deleteTopic(id, topics) {
+    topics.forEach((topic, index) => {
+      if (topic.id === id) {
+        topics.splice(index, 1);
+      }
+    });
+    setRemoveTopic(topics);
+  }
+
+  const archiveTopic = e => {
+    const id = e.target.id;
+    const topicToArchive = topics.find(topic => topic.id == id);
+    let archivedTopic = topicToArchive.discussedOn = new Date();
+    setArchive(archivedTopic);
+  };
+
+  const handleSubmit = e => {
+    e.preventDefault();
+    let newTopic = createNewTopic(e.currentTarget.topic.value);
+    setNewTopic(newTopic);
+  };
+
+  const createNewTopic = topics => {
+    return {
+      upvotes: 0,
+      downvotes: 0,
+      disussedOn: '',
+      title: topics,
+      id: Date.now()
+    };
+  };
+
+  return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement(_Form.default, {
+    handleSubmit: handleSubmit
+  }), /*#__PURE__*/_react.default.createElement("section", null, /*#__PURE__*/_react.default.createElement("h4", null, "Next Topic"), topics.filter(topic => !topic.discussedOn).sort((a, b) => {
+    const topicA = a.upvotes - a.downvotes;
+    const topicB = b.upvotes - b.downvotes;
+    return topicB - topicA;
+  }).map(data => /*#__PURE__*/_react.default.createElement(_TopicLists.default, {
     topic: data,
-    key: data.id
-  })));
+    key: data.id,
+    upvote: upvotes,
+    downvote: downvotes,
+    archivedTopic: archiveTopic
+  }))), /*#__PURE__*/_react.default.createElement("section", null, /*#__PURE__*/_react.default.createElement("h4", null, "Past Topic"), topics.filter(topic => topic.discussedOn).map(topic => /*#__PURE__*/_react.default.createElement(_PastTopic.default, {
+    topic: topic,
+    key: topic.id,
+    removeTopic: deleteTopic
+  }))));
 }
 
 var _default = Topics;
 exports.default = _default;
-},{"react":"node_modules/react/index.js","./TopicLists":"component/TopicLists.js"}],"component/App.js":[function(require,module,exports) {
+},{"react":"node_modules/react/index.js","./TopicLists":"component/TopicLists.js","./PastTopic":"component/PastTopic.js","./Form":"component/Form.js"}],"component/App.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -29915,7 +30049,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53848" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "52565" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
