@@ -54,7 +54,7 @@ function Topics() {
 
     return (
         <>
-            <Form />
+            <Form topics={topics} setTopics={setTopics} />
             <section>
                 <h4>Next Topic</h4>
                 {topics

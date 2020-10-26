@@ -1,16 +1,16 @@
 import React, { useState } from 'react'
-import Topics from './Topics'
+// import Topics from './Topics'    
 
 function Form({ topics, setTopics }) {
     const [newTopic, setAddTopics] = useState('')
 
-    const handleSubmit = e => {
+    const handleSubmit = (e) => {
         e.preventDefault();
-        newTopic = {
+        let newTopic = {
             upvotes: 0,
             downvotes: 0,
             disussedOn: '',
-            title: title,
+            title: e.target.topic.value,
             id: Date.now(),
         };
         topics.push(newTopic);
